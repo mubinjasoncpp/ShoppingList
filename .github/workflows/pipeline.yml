@@ -14,8 +14,8 @@ on:
 env:
   REGISTRY: ghcr.io
   REPOSITORY: ${{ github.repository }}
-  FRONTEND_IMAGE_NAME: se-5g00dm04/frontend
-  BACKEND_IMAGE_NAME: se-5g00dm04/backend
+  FRONTEND_IMAGE_NAME: se-5g00dm04/shoppinglist-frontend
+  BACKEND_IMAGE_NAME: se-5g00dm04/shoppinglist-backend
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
