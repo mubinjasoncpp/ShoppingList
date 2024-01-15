@@ -1,34 +1,42 @@
 
 # This is the teams CD/CD pipeline
 name: CI/CD
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push events but only for the "main" branch
   push:
-    branches: [ "main" ]
-
+    branches: ["main"]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# The jobs that is part of the workflow
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # Job for testing the frontend and backend code changes
+  test:
+    # running on ubuntu
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # Fetch the code using the checkout action
+      - name: Fetch Code
+        uses: actions/checkout@v3
+      # Installing a Node LTS version
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      # Installing the node modules for the frontend
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm install
+      # Running the tests for the frontend code
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        # this command needs to be added to the frontend package.json
+        run: npm run test:ci
+      # Installing the node modules for the backend
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
+      # Running the linter and tests for the backend code
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: npm run lint && npm run test
